@@ -25,3 +25,6 @@ HEADERS += inc/tp_caffe2_utils/OpUtils.h
 
 SOURCES += src/NetUtils.cpp
 HEADERS += inc/tp_caffe2_utils/NetUtils.h
+
+SOURCES += src/ModelDetails.cpp
+HEADERS += inc/tp_caffe2_utils/ModelDetails.h
