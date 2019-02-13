@@ -1,4 +1,4 @@
-#include "tp_caffe2_utils/NetHelpers.h"
+#include "tp_caffe2_utils/NetUtils.h"
 
 namespace tp_caffe2_utils
 {

@@ -1,5 +1,5 @@
-#ifndef tp_caffe2_utils_NetHelpers_h
-#define tp_caffe2_utils_NetHelpers_h
+#ifndef tp_caffe2_utils_NetUtils_h
+#define tp_caffe2_utils_NetUtils_h
 
 #include "tp_caffe2_utils/Globals.h"
 

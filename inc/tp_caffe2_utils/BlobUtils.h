@@ -1,5 +1,5 @@
-#ifndef tp_caffe2_utils_BlobHelpers_h
-#define tp_caffe2_utils_BlobHelpers_h
+#ifndef tp_caffe2_utils_BlobUtils_h
+#define tp_caffe2_utils_BlobUtils_h
 
 #include "tp_caffe2_utils/Globals.h"
 

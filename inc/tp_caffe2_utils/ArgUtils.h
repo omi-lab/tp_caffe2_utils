@@ -1,5 +1,5 @@
-#ifndef tp_caffe2_utils_ArgHelpers_h
-#define tp_caffe2_utils_ArgHelpers_h
+#ifndef tp_caffe2_utils_ArgUtils_h
+#define tp_caffe2_utils_ArgUtils_h
 
 #include "tp_caffe2_utils/Globals.h"
 

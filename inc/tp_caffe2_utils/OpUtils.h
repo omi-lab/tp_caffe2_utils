@@ -1,5 +1,5 @@
-#ifndef tp_caffe2_utils_OpHelpers_h
-#define tp_caffe2_utils_OpHelpers_h
+#ifndef tp_caffe2_utils_OpUtils_h
+#define tp_caffe2_utils_OpUtils_h
 
 #include "tp_caffe2_utils/Globals.h"
 

@@ -28,7 +28,7 @@
 #pragma GCC diagnostic pop
 
 //##################################################################################################
-//! Helpers for working with Caffe2 in c++
+//! Utils for working with Caffe2 in c++
 namespace tp_caffe2_utils
 {
 

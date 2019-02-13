@@ -1,5 +1,5 @@
 #include "tp_caffe2_utils/Print.h"
-#include "tp_caffe2_utils/BlobHelpers.h"
+#include "tp_caffe2_utils/BlobUtils.h"
 
 #include "tp_utils/DebugUtils.h"
 
