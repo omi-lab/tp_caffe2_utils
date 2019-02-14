@@ -23,7 +23,7 @@ void addConstantFillOp(caffe2::NetDef& net,
                        const std::string& output);
 
 //##################################################################################################
-void addCopyConstantFillOp(caffe2::NetDef& net,
+void addConstantFillOp_copy(caffe2::NetDef& net,
                            const std::string& copyShape,
                            float value,
                            const std::string& output);
@@ -31,6 +31,13 @@ void addCopyConstantFillOp(caffe2::NetDef& net,
 //##################################################################################################
 void addGaussianFillOp(caffe2::NetDef& net,
                        const std::vector<int64_t>& shape,
+                       float mean,
+                       float sd,
+                       const std::string& output);
+
+//##################################################################################################
+void addGaussianFillOp_copy(caffe2::NetDef& net,
+                       const std::string& copyShape,
                        float mean,
                        float sd,
                        const std::string& output);
