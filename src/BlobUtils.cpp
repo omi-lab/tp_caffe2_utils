@@ -191,7 +191,7 @@ bool loadWeights(caffe2::Workspace& workspace,
       {
         std::vector<int64_t> dims = jj["dims"];
         std::vector<float> values = jj["values"];
-        tpDebug() << "dims:" << dims.size() << " values:" << values.size();
+        tpWarning() << "dims:" << dims.size() << " values:" << values.size();
         setBlob(workspace, name, values);
       }
     }
