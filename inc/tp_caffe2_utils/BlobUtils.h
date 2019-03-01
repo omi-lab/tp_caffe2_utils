@@ -21,6 +21,9 @@ struct ModelWeights
 };
 
 //##################################################################################################
+std::vector<int64_t> tensorDims(const caffe2::TensorCPU& tensor);
+
+//##################################################################################################
 void readBlob(caffe2::Workspace& workspace,
               const std::string& name,
               std::vector<float>& blobData);

@@ -3,6 +3,7 @@ TEMPLATE = lib
 
 DEFINES += TP_CAFFE2_UTILS_LIBRARY
 
+SOURCES += src/Globals.cpp
 HEADERS += inc/tp_caffe2_utils/Globals.h
 
 SOURCES += src/ArgUtils.cpp
