@@ -24,20 +24,54 @@ caffe2::OperatorDef* addWeightedSumOP(caffe2::NetDef& net,
 
 //##################################################################################################
 void addConv2DOp(ModelDetails& model,
-               const std::string& inName,
-               const std::string& name,
-               int64_t inChannels,
-               int64_t outChannels,
-               int64_t stride,
-               int64_t pad,
-               int64_t kernelSize);
+                 const std::string& inName,
+                 const std::string& name,
+                 int64_t inChannels,
+                 int64_t outChannels,
+                 int64_t stride,
+                 int64_t pad,
+                 int64_t kernelSize);
 
 //##################################################################################################
-caffe2::OperatorDef* addConcat(caffe2::NetDef& net,
-                               const std::vector<std::string>& inNames,
+caffe2::OperatorDef* addConcatOp(caffe2::NetDef& net,
+                                 const std::vector<std::string>& inNames,
+                                 const std::string& name,
+                                 const std::string& splitInfoName,
+                                 int64_t axis = 1);
+
+//##################################################################################################
+caffe2::OperatorDef* addClipOp(caffe2::NetDef& net,
+                               const std::string& inName,
                                const std::string& name,
-                               const std::string& splitInfoName,
-                               int64_t axis = 1);
+                               float min,
+                               float max);
+
+//##################################################################################################
+caffe2::OperatorDef* addMathOp(caffe2::NetDef& net,
+                               const std::string& aName,
+                               const std::string& bName,
+                               const std::string& name,
+                               const std::string& function);
+
+//##################################################################################################
+caffe2::OperatorDef* addFCOp(ModelDetails& model,
+                             const std::string inName,
+                             const std::string outName,
+                             int64_t inSize,
+                             int64_t outSize);
+
+//##################################################################################################
+void addFCActivationOps(ModelDetails& model,
+                        std::vector<caffe2::OperatorDef*>& gradientOps,
+                        const std::string inName,
+                        const std::string outName,
+                        int64_t inSize,
+                        int64_t outSize,
+                        const std::string& function);
+
+
+
+
 
 }
 

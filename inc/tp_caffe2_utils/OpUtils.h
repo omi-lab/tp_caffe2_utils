@@ -19,6 +19,13 @@ void addApplyGradientsOps_simple(ModelDetails& model, float lr);
 //##################################################################################################
 void addApplyGradientsOps_momentum(ModelDetails& model, float lr, float momentum);
 
+//##################################################################################################
+void addApplyGradientsOps_clippedMomentum(ModelDetails& model,
+                                          float lr,
+                                          float momentum,
+                                          float minGradient,
+                                          float maxGradient);
+
 }
 
 #endif
