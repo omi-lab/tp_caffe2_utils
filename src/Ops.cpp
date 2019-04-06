@@ -39,16 +39,14 @@ caffe2::OperatorDef* addWeightedSumOP(caffe2::NetDef& net,
 
 //##################################################################################################
 void addConv2DOp(ModelDetails& model,
-               const std::string& inName,
-               const std::string& name,
-               int64_t inChannels,
-               int64_t outChannels,
-               int64_t stride,
-               int64_t pad,
-               int64_t kernelSize)
+                 const std::string& inName,
+                 const std::string& name,
+                 int64_t inChannels,
+                 int64_t outChannels,
+                 int64_t stride,
+                 int64_t pad,
+                 int64_t kernelSize)
 {
-  model.dataBlobNames.push_back(name);
-
   auto op = model.predictNet.add_op();
   model.gradientOps.push_back(op);
   op->set_type("Conv2D");
@@ -70,11 +68,11 @@ void addConv2DOp(ModelDetails& model,
 }
 
 //##################################################################################################
-caffe2::OperatorDef* addConcat(caffe2::NetDef& net,
-                               const std::vector<std::string>& inNames,
-                               const std::string& name,
-                               const std::string& splitInfoName,
-                               int64_t axis)
+caffe2::OperatorDef* addConcatOp(caffe2::NetDef& net,
+                                 const std::vector<std::string>& inNames,
+                                 const std::string& name,
+                                 const std::string& splitInfoName,
+                                 int64_t axis)
 {
   auto op = net.add_op();
   op->set_type("Concat");
@@ -87,5 +85,83 @@ caffe2::OperatorDef* addConcat(caffe2::NetDef& net,
   op->add_output(splitInfoName);
 
   return op;
+}
+
+
+//##################################################################################################
+caffe2::OperatorDef* addClipOp(caffe2::NetDef& net,
+                               const std::string& inName,
+                               const std::string& name,
+                               float min,
+                               float max)
+{
+  auto op = net.add_op();
+  op->set_type("Clip");
+  tp_caffe2_utils::addFloatArg(op, "min", min);
+  tp_caffe2_utils::addFloatArg(op, "max", max);
+  op->add_input(inName);
+  op->add_output(name);
+  return op;
+}
+
+//##################################################################################################
+caffe2::OperatorDef* addMathOp(caffe2::NetDef& net,
+                               const std::string& aName,
+                               const std::string& bName,
+                               const std::string& name,
+                               const std::string& function)
+{
+  auto op = net.add_op();
+  op->set_type(function);
+  op->add_input(aName);
+  op->add_input(bName);
+  op->add_output(name);
+  return op;
+}
+
+//##################################################################################################
+caffe2::OperatorDef* addFCOp(ModelDetails& model,
+                             const std::string inName,
+                             const std::string outName,
+                             int64_t inSize,
+                             int64_t outSize)
+{
+  auto op = model.predictNet.add_op();
+  op->set_type("FC");
+  op->add_input(inName);
+  op->add_input(outName+"_weights");
+  op->add_input(outName+"_bias");
+  op->add_output(outName);
+
+  tp_caffe2_utils::addXavierFillOp  (model.initPredictNet, {outSize, inSize}, outName+"_weights"); // {outFloats, inFloats}
+  tp_caffe2_utils::addConstantFillOp(model.initPredictNet, {outSize},   0.0f, outName+"_bias"   ); // {outFloats}, initialValue
+
+  model.learntBlobNames.push_back(outName+"_weights");
+  model.learntBlobNames.push_back(outName+"_bias");
+
+  return op;
+}
+//  //-- dropout3 ------------------------------------------------------------------------------------
+//  {
+//    auto op = model.predictNet.add_op();
+//    model.gradientOps.push_back(op);
+//    op->set_type("Dropout");
+//    tp_caffe2_utils::addIntArg(op, "is_test", dropout?0:1);
+//    op->add_input("activation1");
+//    op->add_output("dropout1");
+//    op->add_output("dropout1_mask");
+//  }
+//##################################################################################################
+void addFCActivationOps(ModelDetails& model,
+                        std::vector<caffe2::OperatorDef*>& gradientOps,
+                        const std::string inName,
+                        const std::string outName,
+                        int64_t inSize,
+                        int64_t outSize,
+                        const std::string& function)
+{
+  auto fcName = outName+"_fc";
+  gradientOps.push_back(addFCOp(model, inName, fcName, inSize, outSize));
+  gradientOps.push_back(tp_caffe2_utils::addActivationOp(model.predictNet, fcName, outName, function));
 }
 }

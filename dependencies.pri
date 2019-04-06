@@ -5,7 +5,21 @@ LIBRARIES    += tp_caffe2_utils
 LIBS += -lcaffe2
 LIBS += -lprotobuf
 LIBS += -lc10
+LIBS += -lnnpack
+LIBS += -lpthreadpool
+LIBS += -lonnx
+LIBS += -lonnx_proto
+LIBS += -lonnxifi_loader
+LIBS += -lcpuinfo
+
+iphoneos{
+LIBS += -lclog
+LIBS += -lcaffe2_protos
+LIBS += -lcpuinfo_internals
+}
+else{
 LIBS += -lglog
+}
 
 contains(DEFINES, TP_CUDA) {
 LIBS += -lcaffe2_gpu

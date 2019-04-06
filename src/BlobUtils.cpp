@@ -9,6 +9,20 @@ namespace tp_caffe2_utils
 {
 
 //##################################################################################################
+std::vector<int64_t> tensorDims(const caffe2::TensorCPU& tensor)
+{
+  std::vector<int64_t> blobDims;
+#if 1
+  for(int i=0; i<tensor.ndim(); i++)
+    blobDims.push_back(tensor.dim(i));
+#else
+  for(auto dim : tensor.dims())
+    blobDims.push_back(dim);
+#endif
+  return blobDims;
+}
+
+//##################################################################################################
 void readBlob(caffe2::Workspace& workspace,
               const std::string& name,
               std::vector<float>& blobData)
@@ -48,8 +62,7 @@ void readBlob(caffe2::Workspace& workspace,
     const auto& tensor = blob->Get<caffe2::TensorCPU>();
     const auto &data = tensor.data<float>();
     blobData = std::vector<float>(data, data + tensor.size());
-    for(auto dim : tensor.dims())
-      blobDims.push_back(dim);
+    blobDims = tensorDims(tensor);
   }
 }
 
@@ -73,7 +86,7 @@ bool setBlob(caffe2::Workspace& workspace,
     return false;
   }
 
-  tensor->CopyFrom(caffe2::TensorCPUFromValues<float>(tensor->dims(), inputData));
+  tensor->CopyFrom(caffe2::TensorCPUFromValues<float>(tensorDims(*tensor), inputData));
 
   return true;
 }
@@ -178,7 +191,7 @@ bool loadWeights(caffe2::Workspace& workspace,
       {
         std::vector<int64_t> dims = jj["dims"];
         std::vector<float> values = jj["values"];
-        tpDebug() << "dims:" << dims.size() << " values:" << values.size();
+        tpWarning() << "dims:" << dims.size() << " values:" << values.size();
         setBlob(workspace, name, values);
       }
     }
