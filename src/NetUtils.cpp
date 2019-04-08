@@ -16,7 +16,7 @@ void setDeviceType(caffe2::NetDef& net)
 //##################################################################################################
 void setDeviceType(caffe2::NetDef& net, int32_t value)
 {
-  net.mutable_device_option()->set_device_type(caffe2::PROTO_CUDA);
+  net.mutable_device_option()->set_device_type(value);
   for(int i=0; i<net.op_size(); i++)
     net.mutable_op(i)->mutable_device_option()->set_device_type(value);
 }

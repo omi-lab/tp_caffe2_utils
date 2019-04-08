@@ -3,30 +3,23 @@
 #include "tp_caffe2_utils/ModelDetails.h"
 #include "tp_caffe2_utils/Ops.h"
 
+#include "tp_utils/DebugUtils.h"
+
 namespace tp_caffe2_utils
 {
 
 //##################################################################################################
 void removeOpByOutput(caffe2::NetDef& net,const std::string& opOutputName)
 {
-  for(int i=0; i<net.op_size(); i++)
+  for(auto i=net.mutable_op()->begin(); i!=net.mutable_op()->end(); ++i)
   {
-    auto op = net.op(i);
-
-    bool remove=false;
-    for(int j=0; j<op.output_size(); j++)
+    for(const auto& j : i->output())
     {
-      if(op.output(j) == opOutputName)
+      if(j == opOutputName)
       {
-        remove = true;
-        break;
+        net.mutable_op()->erase(i);
+        return;
       }
-    }
-
-    if(remove)
-    {
-      op.Clear();
-      break;
     }
   }
 }
