@@ -15,6 +15,7 @@
 #pragma GCC diagnostic ignored "-Wpragma-system-header-outside-header"
 #pragma GCC system_header
 
+#undef slots
 #ifdef TP_CUDA
 #include <caffe2/core/context_gpu.h>
 #endif

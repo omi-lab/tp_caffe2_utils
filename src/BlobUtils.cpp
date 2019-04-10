@@ -63,8 +63,10 @@ void readBlob(caffe2::Workspace& workspace,
     const auto &data = tensorCPU->data<float>();
     blobData = std::vector<float>(data, data + tensorCPU->size());
 
-    for(auto dim : tensorCPU->dims())
-      blobDims.push_back(dim);
+    //for(auto dim : tensorCPU->dims())
+    //  blobDims.push_back(dim);
+    for(int i = 0; i < tensorCPU->ndim(); i++)
+      blobDims.push_back(tensorCPU->dim(i));
   }
   else
 #endif
