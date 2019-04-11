@@ -23,6 +23,16 @@ std::vector<int64_t> tensorDims(const caffe2::TensorCPU& tensor)
 }
 
 //##################################################################################################
+std::vector<int64_t> blobDims(caffe2::Workspace& workspace,
+                              const std::string& name)
+{
+  std::vector<float> blobData;
+  std::vector<int64_t> blobDims;
+  readBlob(workspace, name, blobData, blobDims);
+  return blobDims;
+}
+
+//##################################################################################################
 void readBlob(caffe2::Workspace& workspace,
               const std::string& name,
               std::vector<float>& blobData)
@@ -59,10 +69,17 @@ void readBlob(caffe2::Workspace& workspace,
   else
 #endif
   {
-    const auto& tensor = blob->Get<caffe2::TensorCPU>();
-    const auto &data = tensor.data<float>();
-    blobData = std::vector<float>(data, data + tensor.size());
-    blobDims = tensorDims(tensor);
+    if(blob->IsType<caffe2::TensorCPU>())
+    {
+      const auto& tensor = blob->Get<caffe2::TensorCPU>();
+
+      if(tensor.IsType<float>())
+      {
+        const auto& data = tensor.data<float>();
+        blobData = std::vector<float>(data, data + tensor.size());
+        blobDims = tensorDims(tensor);
+      }
+    }
   }
 }
 

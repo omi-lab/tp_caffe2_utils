@@ -164,4 +164,5 @@ void addFCActivationOps(ModelDetails& model,
   gradientOps.push_back(addFCOp(model, inName, fcName, inSize, outSize));
   gradientOps.push_back(tp_caffe2_utils::addActivationOp(model.predictNet, fcName, outName, function));
 }
+
 }
