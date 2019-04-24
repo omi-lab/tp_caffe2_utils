@@ -141,16 +141,7 @@ caffe2::OperatorDef* addFCOp(ModelDetails& model,
 
   return op;
 }
-//  //-- dropout3 ------------------------------------------------------------------------------------
-//  {
-//    auto op = model.predictNet.add_op();
-//    model.gradientOps.push_back(op);
-//    op->set_type("Dropout");
-//    tp_caffe2_utils::addIntArg(op, "is_test", dropout?0:1);
-//    op->add_input("activation1");
-//    op->add_output("dropout1");
-//    op->add_output("dropout1_mask");
-//  }
+
 //##################################################################################################
 void addFCActivationOps(ModelDetails& model,
                         std::vector<caffe2::OperatorDef*>& gradientOps,
@@ -166,21 +157,20 @@ void addFCActivationOps(ModelDetails& model,
 }
 
 //##################################################################################################
-void addDropoutOps(ModelDetails& model,
-                  std::vector<caffe2::OperatorDef*>& gradientOps,
-                  const std::string inName,
-                  const std::string outName,
-                  float ratio,
-                  bool dropout)
+caffe2::OperatorDef* addDropoutOp(ModelDetails& model,
+                                  const std::string inName,
+                                  const std::string outName,
+                                  float ratio,
+                                  bool dropout)
 {
   auto op = model.predictNet.add_op();
-  gradientOps.push_back(op);
   op->set_type("Dropout");
   tp_caffe2_utils::addFloatArg(op, "ratio", ratio);
   tp_caffe2_utils::addIntArg(op, "is_test", dropout?0:1);
   op->add_input(inName);
   op->add_output(outName);
   op->add_output(outName + "_mask");
+  return op;
 }
 
 }
