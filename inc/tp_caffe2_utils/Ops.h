@@ -69,7 +69,13 @@ void addFCActivationOps(ModelDetails& model,
                         int64_t outSize,
                         const std::string& function);
 
-
+//##################################################################################################
+void addDropoutOps(ModelDetails& model,
+                  std::vector<caffe2::OperatorDef*>& gradientOps,
+                  const std::string inName,
+                  const std::string outName,
+                  float ratio,
+                  bool dropout);
 
 
 

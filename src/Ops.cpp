@@ -165,4 +165,22 @@ void addFCActivationOps(ModelDetails& model,
   gradientOps.push_back(tp_caffe2_utils::addActivationOp(model.predictNet, fcName, outName, function));
 }
 
+//##################################################################################################
+void addDropoutOps(ModelDetails& model,
+                  std::vector<caffe2::OperatorDef*>& gradientOps,
+                  const std::string inName,
+                  const std::string outName,
+                  float ratio,
+                  bool dropout)
+{
+  auto op = model.predictNet.add_op();
+  gradientOps.push_back(op);
+  op->set_type("Dropout");
+  tp_caffe2_utils::addFloatArg(op, "ratio", ratio);
+  tp_caffe2_utils::addIntArg(op, "is_test", dropout?0:1);
+  op->add_input(inName);
+  op->add_output(outName);
+  op->add_output(outName + "_mask");
+}
+
 }
