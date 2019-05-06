@@ -1,6 +1,5 @@
 #include "tp_caffe2_utils/BlobUtils.h"
 
-#include "tp_utils/DebugUtils.h"
 #include "tp_utils/JSONUtils.h"
 
 #include "json.hpp"
@@ -88,31 +87,6 @@ void readBlob(caffe2::Workspace& workspace,
 //##################################################################################################
 bool setBlob(caffe2::Workspace& workspace,
              const std::string& name,
-             const std::vector<float>& inputData)
-{
-  caffe2::Blob* blob = workspace.GetBlob(name);
-  if(!blob)
-  {
-    tpWarning() << "Failed to find " << name << " blob.";
-    return false;
-  }
-
-  const auto& tensor = blob->GetMutable<caffe2::TensorCPU>();
-  if(tensor->size() != int(inputData.size()))
-  {
-    tpWarning() << "Failed to set " << name << " blob.";
-    tpWarning() << "Blob size: " << tensor->size() << " data size: " << inputData.size();
-    return false;
-  }
-
-  tensor->CopyFrom(caffe2::TensorCPUFromValues<float>(tensorDims(*tensor), inputData));
-
-  return true;
-}
-
-//##################################################################################################
-bool setBlob(caffe2::Workspace& workspace,
-             const std::string& name,
              const std::vector<float>& inputData,
              const std::vector<int64_t>& blobDims)
 {
@@ -130,9 +104,7 @@ bool setBlob(caffe2::Workspace& workspace,
 //##################################################################################################
 bool setLR(caffe2::Workspace& workspace, float lr)
 {
-  std::vector<float> l;
-  l.push_back(lr);
-  return setBlob(workspace, "lr", l);
+  return setSingleValue(workspace, "lr", lr);
 }
 
 //##################################################################################################

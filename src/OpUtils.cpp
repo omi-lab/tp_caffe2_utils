@@ -2,6 +2,7 @@
 #include "tp_caffe2_utils/FillOps.h"
 #include "tp_caffe2_utils/ModelDetails.h"
 #include "tp_caffe2_utils/Ops.h"
+#include "tp_caffe2_utils/ArgUtils.h"
 
 namespace tp_caffe2_utils
 {
@@ -98,5 +99,39 @@ void addApplyGradientsOps_clippedMomentum(ModelDetails& model,
   }
 }
 
+//##################################################################################################
+void addApplyGradientsOps_adamOptimizer(ModelDetails& model,
+                                        float initialLR,
+                                        float initialIter,
+                                        float beta1,
+                                        float beta2,
+                                        float epsilon)
+{
+  addConstantFillOp(model.initTrainNet, {1}, initialLR, "lr");
+#warning Fix this addConstantFillOp
+  //addConstantFillOp(model.initTrainNet, {1}, initialIter, "iter");
 
+  for(const auto& name : model.learntBlobNames)
+  {
+    tp_caffe2_utils::addConstantFillOp_copy(model.initTrainNet, name, 0.0f, name + "_moment_1");
+    tp_caffe2_utils::addConstantFillOp_copy(model.initTrainNet, name, 0.0f, name + "_moment_2");
+
+    auto op = model.trainNet.add_op();
+    op->set_type("Adam");
+    tp_caffe2_utils::addFloatArg(op, "beta1", beta1);
+    tp_caffe2_utils::addFloatArg(op, "beta2", beta2);
+    tp_caffe2_utils::addFloatArg(op, "epsilon", epsilon);
+
+    op->add_input(name);
+    op->add_input(name + "_moment_1");
+    op->add_input(name + "_moment_2");
+    op->add_input(name + "_grad");
+    op->add_input("lr");
+    op->add_input("iter");
+
+    op->add_output(name);
+    op->add_output(name + "_moment_1");
+    op->add_output(name + "_moment_2");
+  }
+}
 }

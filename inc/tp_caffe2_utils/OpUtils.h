@@ -26,6 +26,14 @@ void addApplyGradientsOps_clippedMomentum(ModelDetails& model,
                                           float minGradient,
                                           float maxGradient);
 
+//##################################################################################################
+void addApplyGradientsOps_adamOptimizer(ModelDetails& model,
+                                        float initialLR,
+                                        float initialIter,
+                                        float beta1,
+                                        float beta2,
+                                        float epsilon);
+
 }
 
 #endif
