@@ -102,14 +102,13 @@ void addApplyGradientsOps_clippedMomentum(ModelDetails& model,
 //##################################################################################################
 void addApplyGradientsOps_adamOptimizer(ModelDetails& model,
                                         float initialLR,
-                                        float initialIter,
+                                        int64_t initialIter,
                                         float beta1,
                                         float beta2,
                                         float epsilon)
 {
   addConstantFillOp(model.initTrainNet, {1}, initialLR, "lr");
-#warning Fix this addConstantFillOp
-  //addConstantFillOp(model.initTrainNet, {1}, initialIter, "iter");
+  model.cpuOps.insert(addConstantFillOp(model.initTrainNet, {1}, initialIter, "iter"));
 
   for(const auto& name : model.learntBlobNames)
   {

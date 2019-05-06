@@ -27,6 +27,9 @@ struct ModelDetails
 
   std::vector<caffe2::OperatorDef*> gradientOps;
 
+  //! Ops to run only on the CPU.
+  std::unordered_set<caffe2::OperatorDef*> cpuOps;
+
   //The names of blobs that are learnt as we train the network.
   std::vector<std::string> learntBlobNames;
 };
