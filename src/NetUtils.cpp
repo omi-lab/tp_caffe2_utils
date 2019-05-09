@@ -13,6 +13,12 @@ void setDeviceType(ModelDetails& model)
 }
 
 //##################################################################################################
+void setDeviceType(caffe2::NetDef& net)
+{
+  setDeviceType(net, std::unordered_set<caffe2::OperatorDef*>());
+}
+
+//##################################################################################################
 void setDeviceType(caffe2::NetDef& net, const std::unordered_set<caffe2::OperatorDef*>& cpuOps)
 {
 #ifdef TP_CUDA

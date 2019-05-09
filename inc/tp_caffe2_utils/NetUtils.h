@@ -13,6 +13,10 @@ void setDeviceType(ModelDetails& model);
 
 //##################################################################################################
 //! If CUDA is available use that else use CPU
+void setDeviceType(caffe2::NetDef& net);
+
+//##################################################################################################
+//! If CUDA is available use that else use CPU
 void setDeviceType(caffe2::NetDef& net, const std::unordered_set<caffe2::OperatorDef*>& cpuOps);
 
 //##################################################################################################
