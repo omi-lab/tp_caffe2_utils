@@ -29,3 +29,6 @@ HEADERS += inc/tp_caffe2_utils/NetUtils.h
 
 SOURCES += src/ModelDetails.cpp
 HEADERS += inc/tp_caffe2_utils/ModelDetails.h
+
+SOURCES += src/LearningRate.cpp
+HEADERS += inc/tp_caffe2_utils/LearningRate.h
