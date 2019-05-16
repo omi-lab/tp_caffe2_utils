@@ -32,3 +32,6 @@ HEADERS += inc/tp_caffe2_utils/ModelDetails.h
 
 SOURCES += src/LearningRate.cpp
 HEADERS += inc/tp_caffe2_utils/LearningRate.h
+
+SOURCES += src/BatchProcess.cpp
+HEADERS += inc/tp_caffe2_utils/BatchProcess.h

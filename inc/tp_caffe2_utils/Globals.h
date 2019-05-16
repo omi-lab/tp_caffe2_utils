@@ -35,6 +35,13 @@ namespace tp_caffe2_utils
 {
 
 //##################################################################################################
+#ifdef TP_CUDA
+constexpr auto defaultDeviceType = caffe2::PROTO_CUDA;
+#else
+constexpr auto defaultDeviceType = caffe2::PROTO_CPU;
+#endif
+
+//##################################################################################################
 void initCaffe2(int argc, char *argv[]);
 
 }

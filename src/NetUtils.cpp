@@ -21,11 +21,7 @@ void setDeviceType(caffe2::NetDef& net)
 //##################################################################################################
 void setDeviceType(caffe2::NetDef& net, const std::unordered_set<caffe2::OperatorDef*>& cpuOps)
 {
-#ifdef TP_CUDA
-  setDeviceType(net, cpuOps, caffe2::PROTO_CUDA);
-    #else
-  setDeviceType(net, cpuOps, caffe2::PROTO_CPU);
-#endif
+  setDeviceType(net, cpuOps, defaultDeviceType);
 }
 
 //##################################################################################################
