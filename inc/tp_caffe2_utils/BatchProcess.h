@@ -21,13 +21,16 @@ class BatchProcess
 {
 public:
   //################################################################################################
-  BatchProcess(const std::vector<DeviceDetails>& devices);
+  BatchProcess(const std::vector<DeviceDetails>& devices)
+  {
+
+  }
 
   //################################################################################################
-  virtual void feed(ModelDetails& model, const std::vector<T*>& items)=0;
+  virtual void feed(const DeviceDetails& device, ModelDetails& model, const std::vector<T*>& items)=0;
 
   //################################################################################################
-  virtual void complete(ModelDetails& model, const std::vector<T*>& items)=0;
+  virtual void complete(const DeviceDetails& device, ModelDetails& model, const std::vector<T*>& items)=0;
 
   //################################################################################################
   void addItem(T* data)
