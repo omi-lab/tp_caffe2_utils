@@ -59,8 +59,10 @@ void readBlob(caffe2::Workspace& workspace,
     auto* tensorCPU = caffe2::BlobGetMutableTensor(blobCPU, caffe2::CPU);
     tensorCPU->CopyFrom(*tensorGPU);
 
-    const auto &data = tensorCPU->data<float>();
-    blobData = std::vector<float>(data, data + tensorCPU->size());
+    const auto &data = tensorCPU->data<float>();    
+    blobData.resize(size_t(tensorCPU->size()));
+    memcpy(blobData.data(), data, size_t(tensorCPU->size())*sizeof(float));
+    //blobData = std::vector<float>(data, data + tensorCPU->size());
 
     //for(auto dim : tensorCPU->dims())
     //  blobDims.push_back(dim);
