@@ -68,6 +68,76 @@ void addConv2DOp(ModelDetails& model,
 }
 
 //##################################################################################################
+void addConv2DOp(ModelDetails& model,
+                 const std::string& inName,
+                 const std::string& name,
+                 int64_t inChannels,
+                 int64_t outChannels,
+                 int64_t strideW,
+                 int64_t strideH,
+                 int64_t padT,
+                 int64_t padL,
+                 int64_t padB,
+                 int64_t padR,
+                 int64_t kernelW,
+                 int64_t kernelH)
+{
+  auto op = model.predictNet.add_op();
+  model.gradientOps.push_back(op);
+  op->set_type("Conv2D");
+  op->add_input(inName);
+  op->add_input(name + "_filter");
+  op->add_input(name + "_bias");
+  op->add_output(name);
+
+  addIntArg   (op, "stride_w", strideW);
+  addIntArg   (op, "stride_h", strideH);
+  addIntArg   (op, "pad_t"   , padT);
+  addIntArg   (op, "pad_l"   , padL);
+  addIntArg   (op, "pad_b"   , padB);
+  addIntArg   (op, "pad_r"   , padR);
+  addIntArg   (op, "kernel_w"   , kernelW);
+  addIntArg   (op, "kernel_h"   , kernelH);
+  addStringArg(op, "order" , "NCHW");
+
+  addXavierFillOp  (model.initPredictNet, {outChannels, inChannels, kernelH, kernelW}, name + "_filter");
+  addConstantFillOp(model.initPredictNet, {outChannels},                               0.0f, name + "_bias");
+
+  model.learntBlobNames.push_back(name + "_filter");
+  model.learntBlobNames.push_back(name + "_bias");
+}
+
+//##################################################################################################
+void addAveragePool2DOp(ModelDetails& model,
+                        const std::string& inName,
+                        const std::string& name,
+                        int64_t strideW,
+                        int64_t strideH,
+                        int64_t padT,
+                        int64_t padL,
+                        int64_t padB,
+                        int64_t padR,
+                        int64_t kernelW,
+                        int64_t kernelH)
+{
+  auto op = model.predictNet.add_op();
+  model.gradientOps.push_back(op);
+  op->set_type("AveragePool2D");
+  op->add_input(inName);
+  op->add_output(name);
+
+  addIntArg   (op, "stride_w", strideW);
+  addIntArg   (op, "stride_h", strideH);
+  addIntArg   (op, "pad_t"   , padT);
+  addIntArg   (op, "pad_l"   , padL);
+  addIntArg   (op, "pad_b"   , padB);
+  addIntArg   (op, "pad_r"   , padR);
+  addIntArg   (op, "kernel_w"   , kernelW);
+  addIntArg   (op, "kernel_h"   , kernelH);
+  addStringArg(op, "order" , "NCHW");
+}
+
+//##################################################################################################
 caffe2::OperatorDef* addConcatOp(caffe2::NetDef& net,
                                  const std::vector<std::string>& inNames,
                                  const std::string& name,

@@ -10,6 +10,9 @@ namespace tp_caffe2_utils
 void printBlob(caffe2::Workspace& workspace, const std::string& name);
 
 //##################################################################################################
+void printAllBlobShapes(caffe2::Workspace& workspace);
+
+//##################################################################################################
 void printArg(const caffe2::Argument& arg);
 
 //##################################################################################################

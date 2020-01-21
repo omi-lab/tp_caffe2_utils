@@ -15,6 +15,26 @@ void printBlob(caffe2::Workspace& workspace, const std::string& name)
 }
 
 //##################################################################################################
+void printAllBlobShapes(caffe2::Workspace& workspace)
+{
+  for(const auto& blobName : workspace.Blobs())
+  {
+    std::vector<float> blobData;
+    std::vector<int64_t> blobDims;
+    readBlob(workspace, blobName, blobData, blobDims);
+
+    std::string dimsString;
+    for(auto dim : blobDims)
+    {
+      if(!dimsString.empty())
+        dimsString += ", ";
+      dimsString += std::to_string(dim);
+    }
+    tpWarning() << blobName << " (" << dimsString << ") size: " << blobData.size();
+  }
+}
+
+//##################################################################################################
 void printArg(const caffe2::Argument& arg)
 {
   std::string dbg = arg.DebugString();

@@ -33,6 +33,34 @@ void addConv2DOp(ModelDetails& model,
                  int64_t kernelSize);
 
 //##################################################################################################
+void addConv2DOp(ModelDetails& model,
+                 const std::string& inName,
+                 const std::string& name,
+                 int64_t inChannels,
+                 int64_t outChannels,
+                 int64_t strideW,
+                 int64_t strideH,
+                 int64_t padT,
+                 int64_t padL,
+                 int64_t padB,
+                 int64_t padR,
+                 int64_t kernelW,
+                 int64_t kernelH);
+
+//##################################################################################################
+void addAveragePool2DOp(ModelDetails& model,
+                        const std::string& inName,
+                        const std::string& name,
+                        int64_t strideW,
+                        int64_t strideH,
+                        int64_t padT,
+                        int64_t padL,
+                        int64_t padB,
+                        int64_t padR,
+                        int64_t kernelW,
+                        int64_t kernelH);
+
+//##################################################################################################
 caffe2::OperatorDef* addConcatOp(caffe2::NetDef& net,
                                  const std::vector<std::string>& inNames,
                                  const std::string& name,
