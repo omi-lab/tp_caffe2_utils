@@ -27,6 +27,7 @@ caffe2::OperatorDef* addMSRAFillOp(caffe2::NetDef& net,
   return op;
 }
 
+
 //##################################################################################################
 caffe2::OperatorDef* addConstantFillOp(caffe2::NetDef& net,
                                        const std::vector<int64_t>& shape,
@@ -37,6 +38,20 @@ caffe2::OperatorDef* addConstantFillOp(caffe2::NetDef& net,
   op->set_type("ConstantFill");
   addShapeArg(op, shape);
   addFloatArg(op, "value", value);
+  op->add_output(output);
+  return op;
+}
+
+//##################################################################################################
+caffe2::OperatorDef* addConstantFillOp(caffe2::NetDef& net,
+                                       const std::vector<int64_t>& shape,
+                                       int64_t value,
+                                       const std::string& output)
+{
+  auto op = net.add_op();
+  op->set_type("ConstantFill");
+  addShapeArg(op, shape);
+  addIntArg(op, "value", value);
   op->add_output(output);
   return op;
 }

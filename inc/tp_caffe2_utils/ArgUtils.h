@@ -24,6 +24,8 @@ void addStringArg(caffe2::OperatorDef* op, const std::string& name, const char* 
 //##################################################################################################
 void addShapeArg(caffe2::OperatorDef* op, const std::vector<int64_t>& shape);
 
+
+
 }
 
 #endif
