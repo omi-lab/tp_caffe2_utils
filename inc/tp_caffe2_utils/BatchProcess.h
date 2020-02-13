@@ -7,6 +7,8 @@
 
 #include "tp_utils/MutexUtils.h"
 
+#include <memory>
+#include <thread>
 #include <cassert>
 
 namespace tp_caffe2_utils

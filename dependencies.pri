@@ -24,7 +24,7 @@ LIBS += -lglog
 }
 
 contains(DEFINES, TP_CUDA) {
-LIBS += -lcaffe2_gpu
+LIBS += -ltorch_cuda
 LIBS += -lcudnn
 LIBS += -lcuda
 LIBS += -lcudart
