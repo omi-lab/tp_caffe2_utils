@@ -48,6 +48,33 @@ void addConv2DOp(ModelDetails& model,
                  int64_t kernelH);
 
 //##################################################################################################
+void addConv2DActivationOps(ModelDetails& model,
+                            const std::string& inName,
+                            const std::string& outName,
+                            int64_t inChannels,
+                            int64_t outChannels,
+                            int64_t stride,
+                            int64_t pad,
+                            int64_t kernelSize,
+                            const std::string& function);
+
+//##################################################################################################
+void addConv2DActivationOps(ModelDetails& model,
+                            const std::string& inName,
+                            const std::string& outName,
+                            int64_t inChannels,
+                            int64_t outChannels,
+                            int64_t strideW,
+                            int64_t strideH,
+                            int64_t padT,
+                            int64_t padL,
+                            int64_t padB,
+                            int64_t padR,
+                            int64_t kernelW,
+                            int64_t kernelH,
+                            const std::string& function);
+
+//##################################################################################################
 void addAveragePool2DOp(ModelDetails& model,
                         const std::string& inName,
                         const std::string& name,

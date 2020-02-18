@@ -30,6 +30,10 @@ std::vector<int64_t> blobDims(caffe2::Workspace& workspace,
                               const std::string& name);
 
 //##################################################################################################
+float readSingleValue(caffe2::Workspace& workspace,
+                      const std::string& name);
+
+//##################################################################################################
 void readBlob(caffe2::Workspace& workspace,
               const std::string& name,
               std::vector<float>& blobData);
