@@ -11,6 +11,9 @@ struct ModelDetails;
 void removeOpByOutput(caffe2::NetDef& net,const std::string& opOutputName);
 
 //##################################################################################################
+void addGradientOps(std::vector<caffe2::OperatorDef*> gradientOps, caffe2::NetDef& trainNet);
+
+//##################################################################################################
 void addGradientOps(ModelDetails& model);
 
 //##################################################################################################

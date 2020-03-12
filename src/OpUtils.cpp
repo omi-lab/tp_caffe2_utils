@@ -24,30 +24,31 @@ void removeOpByOutput(caffe2::NetDef& net,const std::string& opOutputName)
 }
 
 //##################################################################################################
+void addGradientOps(std::vector<caffe2::OperatorDef*> gradientOps, caffe2::NetDef& trainNet)
+{
+  for (size_t i=gradientOps.size()-1; i<gradientOps.size(); i--)
+  {
+    auto op = gradientOps[i];
+
+    std::vector<caffe2::GradientWrapper> output(size_t(op->output_size()));
+    for (size_t j = 0; j < output.size(); j++)
+      output[j].dense_ = op->output(int(j)) + "_grad";
+
+    caffe2::GradientOpsMeta meta = caffe2::GetGradientForOp(*op, output);
+
+    auto grad = trainNet.add_op();
+    grad->CopyFrom(meta.ops_[0]);
+    grad->set_is_gradient_op(true);
+  }
+}
+
+//##################################################################################################
 void addGradientOps(ModelDetails& model)
 {
-  auto addOps = [](std::vector<caffe2::OperatorDef*> gradientOps, caffe2::NetDef& trainNet)
-  {
-    for (size_t i=gradientOps.size()-1; i<gradientOps.size(); i--)
-    {
-      auto op = gradientOps[i];
-
-      std::vector<caffe2::GradientWrapper> output(size_t(op->output_size()));
-      for (size_t j = 0; j < output.size(); j++)
-        output[j].dense_ = op->output(int(j)) + "_grad";
-
-      caffe2::GradientOpsMeta meta = caffe2::GetGradientForOp(*op, output);
-
-      auto grad = trainNet.add_op();
-      grad->CopyFrom(meta.ops_[0]);
-      grad->set_is_gradient_op(true);
-    }
-  };
-
   for(const auto& subNet : model.trainSubNets)
-    addOps(subNet->gradientOps, subNet->trainNet);
+    addGradientOps(subNet->gradientOps, subNet->trainNet);
 
-  addOps(model.gradientOps, model.trainNet);
+  addGradientOps(model.gradientOps, model.trainNet);
 }
 
 //##################################################################################################
