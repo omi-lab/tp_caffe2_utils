@@ -68,15 +68,22 @@ void readBlob(caffe2::Workspace& workspace,
     auto* tensorCPU = caffe2::BlobGetMutableTensor(blobCPU, caffe2::CPU);
     tensorCPU->CopyFrom(*tensorGPU);
 
-    const auto &data = tensorCPU->data<float>();    
-    blobData.resize(size_t(tensorCPU->size()));
-    memcpy(blobData.data(), data, size_t(tensorCPU->size())*sizeof(float));
-    //blobData = std::vector<float>(data, data + tensorCPU->size());
+    if(tensorCPU->IsType<float>())
+    {
+      const auto &data = tensorCPU->data<float>();
+      blobData.resize(size_t(tensorCPU->size()));
+      memcpy(blobData.data(), data, size_t(tensorCPU->size())*sizeof(float));
+      //blobData = std::vector<float>(data, data + tensorCPU->size());
 
-    //for(auto dim : tensorCPU->dims())
-    //  blobDims.push_back(dim);
-    for(int i = 0; i < tensorCPU->ndim(); i++)
-      blobDims.push_back(tensorCPU->dim(i));
+      //for(auto dim : tensorCPU->dims())
+      //  blobDims.push_back(dim);
+      for(int i = 0; i < tensorCPU->ndim(); i++)
+        blobDims.push_back(tensorCPU->dim(i));
+    }
+    else
+    {
+      tpWarning() << "readBlob failed to read " << name << " not a float.";
+    }
   }
   else
 #endif
@@ -90,6 +97,10 @@ void readBlob(caffe2::Workspace& workspace,
         const auto& data = tensor.data<float>();
         blobData = std::vector<float>(data, data + tensor.size());
         blobDims = tensorDims(tensor);
+      }
+      else
+      {
+        tpWarning() << "readBlob failed to read " << name << " not a float.";
       }
     }
   }
