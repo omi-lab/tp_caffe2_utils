@@ -95,6 +95,13 @@ caffe2::OperatorDef* addConcatOp(caffe2::NetDef& net,
                                  int64_t axis = 1);
 
 //##################################################################################################
+caffe2::OperatorDef* addSliceOp(caffe2::NetDef& net,
+                                const std::string& inName,
+                                const std::string& name,
+                                const std::vector<int64_t>& starts,
+                                const std::vector<int64_t>& ends);
+
+//##################################################################################################
 caffe2::OperatorDef* addClipOp(caffe2::NetDef& net,
                                const std::string& inName,
                                const std::string& name,

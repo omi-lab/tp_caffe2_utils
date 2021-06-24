@@ -63,20 +63,17 @@ void readBlob(caffe2::Workspace& workspace,
   if(caffe2::BlobIsTensorType(*blob, caffe2::CUDA))
   {
     caffe2::Blob* blobCPU = workspace.CreateBlob(name+"CPU");
-    auto* tensorGPU = BlobGetMutableTensor(blob, caffe2::CUDA);
+    const auto& tensorGPU = caffe2::BlobGetTensor(*blob, caffe2::CUDA);
 
     auto* tensorCPU = caffe2::BlobGetMutableTensor(blobCPU, caffe2::CPU);
-    tensorCPU->CopyFrom(*tensorGPU);
+    tensorCPU->CopyFrom(tensorGPU);
 
     if(tensorCPU->IsType<float>())
     {
       const auto &data = tensorCPU->data<float>();
       blobData.resize(size_t(tensorCPU->size()));
       memcpy(blobData.data(), data, size_t(tensorCPU->size())*sizeof(float));
-      //blobData = std::vector<float>(data, data + tensorCPU->size());
 
-      //for(auto dim : tensorCPU->dims())
-      //  blobDims.push_back(dim);
       for(int i = 0; i < tensorCPU->ndim(); i++)
         blobDims.push_back(tensorCPU->dim(i));
     }

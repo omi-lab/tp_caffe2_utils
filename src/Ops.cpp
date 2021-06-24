@@ -61,7 +61,12 @@ void addConv2DOp(ModelDetails& model,
   addStringArg(op, "order" , "NCHW");
 
   addXavierFillOp  (model.initPredictNet, {outChannels, inChannels, kernelSize, kernelSize}, name + "_filter");
-  addConstantFillOp(model.initPredictNet, {outChannels},                               0.0f, name + "_bias");
+  //addConstantFillOp(model.initPredictNet, {outChannels},                               0.0f, name + "_bias");
+
+  addGaussianFillOp(model.initPredictNet, {outChannels}, 0.0f, 0.2f, name + "_bias");
+
+
+
 
   model.learntBlobNames.push_back(name + "_filter");
   model.learntBlobNames.push_back(name + "_bias");
@@ -101,7 +106,9 @@ void addConv2DOp(ModelDetails& model,
   addStringArg(op, "order" , "NCHW");
 
   addXavierFillOp  (model.initPredictNet, {outChannels, inChannels, kernelH, kernelW}, name + "_filter");
-  addConstantFillOp(model.initPredictNet, {outChannels},                               0.0f, name + "_bias");
+  addConstantFillOp(model.initPredictNet, {outChannels},                         0.0f, name + "_bias");
+
+  //addGaussianFillOp(model.initPredictNet, {outChannels}, 0.0f, 0.2f, name + "_bias");
 
   model.learntBlobNames.push_back(name + "_filter");
   model.learntBlobNames.push_back(name + "_bias");
@@ -190,6 +197,24 @@ caffe2::OperatorDef* addConcatOp(caffe2::NetDef& net,
 
   op->add_output(name);
   op->add_output(splitInfoName);
+
+  return op;
+}
+
+//##################################################################################################
+caffe2::OperatorDef* addSliceOp(caffe2::NetDef& net,
+                                const std::string& inName,
+                                const std::string& name,
+                                const std::vector<int64_t>& starts,
+                                const std::vector<int64_t>& ends)
+{
+  auto op = net.add_op();
+  op->set_type("Slice");
+  op->add_input(inName);
+  op->add_output(name);
+
+  addIntsArg(op, "starts", starts);
+  addIntsArg(op, "ends", ends);
 
   return op;
 }
